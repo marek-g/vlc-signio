@@ -287,6 +287,12 @@ static int H264SetCSD(decoder_t *p_dec, void *p_buf, size_t i_size,
 
             p_sys->u.video.i_width = sps.i_width;
             p_sys->u.video.i_height = sps.i_height;
+
+	    // MG: FullHD movie FIX
+	    if (p_sys->u.video.i_height == 1088) {
+	        p_sys->u.video.i_height = 1080;
+	    }
+
             return VLC_SUCCESS;
         }
     }
@@ -567,6 +573,11 @@ static int OpenDecoder(vlc_object_t *p_this, pf_MediaCodecApi_init pf_init)
         p_sys->pf_process_output = Video_ProcessOutput;
         p_sys->u.video.i_width = p_dec->fmt_in.video.i_width;
         p_sys->u.video.i_height = p_dec->fmt_in.video.i_height;
+
+	// MG: FullHD movie FIX
+	if (p_sys->u.video.i_height == 1088) {
+	    p_sys->u.video.i_height = 1080;
+	}
 
         p_sys->u.video.timestamp_fifo = timestamp_FifoNew(32);
         if (!p_sys->u.video.timestamp_fifo)
